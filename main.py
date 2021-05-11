@@ -1,11 +1,19 @@
 import asyncio
 
-from binance import AsyncClient
+from core import Exchange
+from core.connect import Connector
+from core.connect.historical import BinanceSourceTask
+from core.connect.datasinks import StdoutSinkTask
 
-from core.connectors import BinanceConnector
-from core.datasources import StdoutDataSource
+config = {
+    'timeframe' : '4h',
+    'exchange' : Exchange.BINANCE,
+    'pair' : 'ETHBTC',
+    'start' : '2021-01-01 00:00:00'
+}
+binance_source = BinanceSourceTask(config)
+stdout_sink = StdoutSinkTask(config)
+binance_connector = Connector(binance_source, stdout_sink)
 
-stdout_sink = StdoutDataSource()
 loop = asyncio.get_event_loop()
-binance_connector = BinanceConnector(stdout_sink)
-loop.run_until_complete(binance_connector.replicate("ETHBTC", AsyncClient.KLINE_INTERVAL_4HOUR, start="2021-01-01 00:00:00"))
+loop.run_until_complete(binance_connector.open())
