@@ -1,5 +1,5 @@
 from os import getenv
-from core.data_source import DataSource
+from core import DataSource
 from sqlalchemy import create_engine
 
 

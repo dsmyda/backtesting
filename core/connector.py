@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
-
-from core.data_source import DataSource
+from core import DataSource
 
 
 class Connector(metaclass=ABCMeta):

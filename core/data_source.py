@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core.exchange import Exchange
+from core import Exchange
 
 
 class DataSource(ABC):

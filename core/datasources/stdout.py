@@ -1,5 +1,4 @@
-from core.data_source import DataSource
-from core.exchange import Exchange
+from core import DataSource, Exchange
 
 
 class StdoutDataSource(DataSource):
