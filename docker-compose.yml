@@ -2,8 +2,9 @@ version: "1.0"
 
 services:
   postgres:
-    build:
-      context: ./postgres
+    image: postgres
+    volumes:
+      - ./.postgresql/data:/var/lib/postgresql/data
     environment:
       - POSTGRES_READER_CONNECTION=""
       - POSTGRES_WRITER_CONNECTION=""
