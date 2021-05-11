@@ -1,17 +1,16 @@
-import os
+from os import getenv
 from core.data_source import DataSource
 from sqlalchemy import create_engine
 
 
 class PostgresDataSource(DataSource):
 
-    READER_CONNECTION = os.getenv('POSTGRES_CONNECTION_READER')
-    WRITER_CONNECTION = os.getenv('POSTGRES_CONNECTION_WRITER')
+    WRITER_CONNECTION_STRING = getenv('POSTGRES_CONNECTION_WRITER')
 
     def __init__(self):
-        self.pool = None
+        self.database = create_engine(PostgresDataSource.WRITER_CONNECTION_STRING)
 
-    def add(self, json: str):
+    def save(self, exchange, pair, timeframe, key_values: dict):
         pass
 
     def get_latest_timestamp(self, exchange, pair, timeframe):

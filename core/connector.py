@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
-from ..data_source import DataSource
+
+from core.data_source import DataSource
 
 
 class Connector(metaclass=ABCMeta):
@@ -9,5 +10,5 @@ class Connector(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    async def replicate(self, exchange, pair, timeframe, start=None, end=None):
+    async def replicate(self, pair, timeframe, start=None, end=None):
         pass

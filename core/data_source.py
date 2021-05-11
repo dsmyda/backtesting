@@ -1,16 +1,17 @@
 from abc import ABC, abstractmethod
+from core.exchange import Exchange
 
 
 class DataSource(ABC):
 
     @abstractmethod
-    def add(self, json: str):
+    def save(self, exchange: Exchange, pair, timeframe, key_values: dict):
         pass
 
     @abstractmethod
-    def get_latest_timestamp(self, exchange, pair, timeframe):
+    def get_latest_timestamp(self, exchange: Exchange, pair, timeframe):
         pass
 
     @abstractmethod
-    def to_pd_date_frame(self, exchange, pair, timeframe, start=None, end=None):
+    def to_pd_date_frame(self, exchange: Exchange, pair, timeframe, start=None, end=None):
         pass
