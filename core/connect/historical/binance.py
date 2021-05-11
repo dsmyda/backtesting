@@ -9,14 +9,11 @@ class BinanceSourceTask(SourceTask):
     KLINE_COLUMNS = ["Open_Time", "Open", "High", "Low", "Close", "Volume", "Close_Time", "Quote_Asset_Volume",
                      "Number_of_Trades", "Taker_Buy_Base_Asset_Volume", "Taker_Buy_Quote_Asset_Volume"]
 
-    API_KEY = getenv('BINANCE_API_KEY')
-    API_SECRET = getenv('BINANCE_API_SECRET')
-
     def __init__(self, connect_config):
         self.config = connect_config
 
     async def poll(self):
-        client = await AsyncClient.create(BinanceSourceTask.API_KEY, BinanceSourceTask.API_SECRET, tld='us')
+        client = await AsyncClient.create(getenv('BINANCE_API_KEY'), getenv('BINANCE_API_SECRET'), tld='us')
         try:
             for kline in await client.get_historical_klines(self.config['pair'], self.config['timeframe'],
                                                             self.config['start'], limit=1000):

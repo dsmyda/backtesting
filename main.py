@@ -6,10 +6,15 @@ from core.connect.historical import BinanceSourceTask
 from core.connect.datasinks import StdoutSinkTask
 
 config = {
-    'timeframe' : '4h',
-    'exchange' : Exchange.BINANCE,
-    'pair' : 'ETHBTC',
-    'start' : '2021-01-01 00:00:00'
+    'timeframe': '4h',
+    'exchange': Exchange.BINANCE,
+    'pair': 'ETHBTC',
+    'start': '2021-01-01 00:00:00',
+    'sql': {
+        # TODO, implement this for postgres
+        'table': 'exchanges.historical.binance.4h.ethbtc',
+        'ddl': ''
+    }
 }
 binance_source = BinanceSourceTask(config)
 stdout_sink = StdoutSinkTask(config)
