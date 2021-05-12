@@ -1,2 +1,3 @@
-# backtesting
-Infrastructure to backtest our trading strategies.
+# yabl
+
+Yet Another Backtesting Library
