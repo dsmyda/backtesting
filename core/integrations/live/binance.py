@@ -1,7 +1,7 @@
-from core.connect import SourceTask
+from core.integrations import SourceNode
 
 
-class BinanceLiveSourceTask(SourceTask):
+class BinanceLiveSourceNode(SourceNode):
     """ Tracks live trading data from binance """
 
     def __init__(self, config):
