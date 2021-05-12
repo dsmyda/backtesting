@@ -1,1 +1,2 @@
-from .sma_cross import SmaCross
+from .sma_cross import *
+from .macd import *

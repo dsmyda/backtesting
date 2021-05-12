@@ -2,8 +2,7 @@ import asyncio
 from asyncio.log import logger
 
 import pandas as pd
-
-from core import IntermediateNode
+from core import Producer, Consumer
 
 
 def _add_datetime_index(data_frame):
@@ -12,10 +11,11 @@ def _add_datetime_index(data_frame):
     return data_frame.set_index(datetime_index)
 
 
-class PdDataFrameIntermediateNode(IntermediateNode):
+class PandasDataFrameNode(Producer, Consumer):
     def __init__(self, config):
         super().__init__(config)
         self.latest = pd.DataFrame()
+        self.event = asyncio.Event()
 
     async def produce(self):
         logger.debug(str(self) + ' waiting for data frame')

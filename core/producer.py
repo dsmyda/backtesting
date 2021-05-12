@@ -2,7 +2,7 @@ from abc import abstractmethod
 from core import Node
 
 
-class SourceNode(Node):
+class Producer(Node):
 
     @abstractmethod
     async def produce(self):

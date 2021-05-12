@@ -2,28 +2,23 @@ import asyncio
 import logging
 
 from core import Exchange
-from core.integrations.historical import BinanceHistoricalSourceNode
-from core.intermediates import PdDataFrameIntermediateNode
-from core import BackTestSinkNode, Pipeline
+from core.exchanges import BinanceHistoricalProducer
+from core.intermediates import PandasDataFrameNode
+from core import BackTestConsumer, Pipeline
 
-asyncio.get_event_loop().set_debug(enabled=True)
-logging.basicConfig(level=logging.DEBUG)
+#asyncio.get_event_loop().set_debug(enabled=True)
+#logging.basicConfig(level=logging.DEBUG)
 
 config = {
-    'timeframe': '4h',
+    'timeframe': '1d',
     'exchange': Exchange.BINANCE,
-    'pair': 'ETHBTC',
-    'start': '2021-05-01 00:00:00',
-    'sql': {
-        # TODO, implement this for postgres
-        'table': 'exchanges.historical.binance.4h.ethbtc',
-        'ddl': ''
-    }
+    'pair': 'ETHUSDT',
+    'start': '2020-11-01 00:00:00'
 }
 
-Pipeline(
-    config,
-    BinanceHistoricalSourceNode,
-    PdDataFrameIntermediateNode,
-    BackTestSinkNode
-).run()
+pipeline = Pipeline(config).chain(
+    BinanceHistoricalProducer,
+    PandasDataFrameNode,
+    BackTestConsumer
+)
+pipeline.run()

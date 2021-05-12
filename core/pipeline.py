@@ -1,20 +1,22 @@
 import asyncio
 from asyncio.log import logger
-from typing import Type
-from core import SourceNode, SinkNode, Node
+from core import Producer, Consumer
 
 
 class Pipeline:
 
-    def __init__(self, config, *nodes: Type[Node]):
-        assert len(nodes) >= 2
-        nodes = [node(config) for node in nodes]
-
+    def __init__(self, config):
+        self.config = config
         self.edges = []
+
+    def chain(self, *nodes):
+        assert len(nodes) >= 2
+        nodes = [node(self.config) for node in nodes]
         logger.debug(str(self) + ' constructing pipeline')
         for i in range(len(nodes) - 1):
             self.edges.append(Edge(nodes[i], nodes[i + 1]))
         logger.debug(str(self) + ' finished constructing pipeline')
+        return self
 
     def run(self):
         """ Start dataflow in the pipeline and wait for it to complete """
@@ -29,9 +31,9 @@ class Pipeline:
 
 class Edge:
 
-    def __init__(self, source: SourceNode, sink: SinkNode):
-        self.source: SourceNode = source
-        self.sink: SinkNode = sink
+    def __init__(self, source: Producer, sink: Consumer):
+        self.source: Producer = source
+        self.sink: Consumer = sink
 
     async def open(self):
         logger.debug(str(self) + ' opened')

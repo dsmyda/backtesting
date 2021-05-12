@@ -1,8 +1,7 @@
 from .exchange import *
 from .node import *
-from .source import *
-from .sink import *
-from .intermediate import *
+from .producer import *
+from .consumer import *
 from .pipeline import Pipeline
 from .backtest import *
 

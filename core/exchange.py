@@ -2,4 +2,6 @@ from enum import Enum
 
 
 class Exchange(Enum):
-    BINANCE = 'binance'
+    BINANCE = {
+        "commission": 0.01
+    }
