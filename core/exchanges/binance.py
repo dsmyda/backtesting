@@ -14,26 +14,28 @@ class BinanceHistoricalProducer(Producer):
         super().__init__(config)
 
     async def produce(self):
-        logger.debug('[' + self.__class__.__name__ + '] preparing to initialize client')
+        logger.debug(str(self) + ' preparing to initialize client')
         client = await AsyncClient.create(getenv('BINANCE_API_KEY'), getenv('BINANCE_API_SECRET'), tld='us')
-        logger.debug('[' + self.__class__.__name__ + '] finished initializing client')
+        logger.debug(str(self) + ' finished initializing client')
 
         try:
-            logger.debug('[' + self.__class__.__name__ + '] preparing to fetch kline data')
+            logger.debug(str(self) + ' preparing to fetch kline data')
             for kline in await client.get_historical_klines(self.config['pair'], self.config['timeframe'],
                                                             self.config['start'], limit=1000):
-                logger.debug('[' + self.__class__.__name__ + '] kline data received')
+                logger.debug(str(self) + ' kline data received')
                 kline.pop()  # Pop off legacy field, which we can ignore
                 yield dict(zip(BinanceHistoricalProducer.KLINE_COLUMNS, [[float(v) if i > 0 else v] for i, v in enumerate(kline)]))
 
-            logger.debug('[' + self.__class__.__name__ + '] finished fetching kline data')
+            logger.debug(str(self) + ' finished fetching kline data')
         finally:
-            logger.debug('[' + self.__class__.__name__ + '] preparing to close connection')
+            logger.debug(str(self) + ' preparing to close connection')
             await client.close_connection()
-            logger.debug('[' + self.__class__.__name__ + '] finishing closing connection')
+            logger.debug(str(self) + ' finishing closing connection')
 
         yield None
 
+    def __str__(self):
+        return '[' + self.__class__.__name__ + ']'
 
 class BinanceLiveProducer(Producer):
     """ Tracks live trading data from binance """
