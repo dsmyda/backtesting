@@ -5,17 +5,16 @@ import pandas as pd
 from core import Producer, Consumer
 
 
-def _add_datetime_index(data_frame):
-    datetime_series = pd.to_datetime(data_frame['Open_Time'], unit="ms")
-    datetime_index = pd.DatetimeIndex(datetime_series.values)
-    return data_frame.set_index(datetime_index)
-
-
 class PandasDataFrameNode(Producer, Consumer):
     def __init__(self, config):
         super().__init__(config)
         self.latest = pd.DataFrame()
         self.event = asyncio.Event()
+
+    def _add_datetime_index(self, data_frame):
+        datetime_series = pd.to_datetime(data_frame[self.config['exchange'].value['datetime']], unit="ms")
+        datetime_index = pd.DatetimeIndex(datetime_series.values)
+        return data_frame.set_index(datetime_index)
 
     async def produce(self):
         logger.debug(str(self) + ' waiting for data frame')
@@ -23,7 +22,7 @@ class PandasDataFrameNode(Producer, Consumer):
         logger.debug(str(self) + ' finished waiting, data frame received')
 
         self.latest = await asyncio.get_event_loop().run_in_executor(
-            None, lambda: _add_datetime_index(self.latest))
+            None, lambda: self._add_datetime_index(self.latest))
 
         yield self.latest
 

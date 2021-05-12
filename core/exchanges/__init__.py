@@ -1,2 +1,2 @@
-from .binance import *
 from .exchange import *
+from .binance import *
