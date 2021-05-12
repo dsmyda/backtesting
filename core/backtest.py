@@ -12,7 +12,7 @@ class BackTestConsumer(Consumer):
 
     async def consume(self, data):
         logger.debug(str(self) + ' historical data frame received')
-        bt = Backtest(data, MacdCross,
+        bt = Backtest(data, self.config['strategy'],
                       exclusive_orders=True,
                       trade_on_close=True,
                       commission=self.config['exchange'].value['commission'])

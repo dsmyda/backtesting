@@ -1,4 +1,3 @@
-from .exchange import *
 from .node import *
 from .producer import *
 from .consumer import *
