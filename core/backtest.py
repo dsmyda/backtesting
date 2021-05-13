@@ -1,4 +1,3 @@
-import asyncio
 from asyncio.log import logger
 
 from backtesting import Backtest

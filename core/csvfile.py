@@ -9,6 +9,8 @@ def cast(datatype: str, value):
         return float(value)
     elif datatype == 'dateiso':
         return datetime.fromisoformat(value).timestamp() * 1000  #convert to epoch ms for downstream consumers
+    else:
+        return value
 
 
 class CsvFile(Producer):
