@@ -1,0 +1,13 @@
+pipeline:
+  csvfile:
+    path: testdata/GOOG.csv
+    schema:
+      Date: dateiso
+      Open: number
+      High: number
+      Low: number
+      Close: number
+      Adj Close: number
+      Volume: number
+  backtest:
+    strategy: macdcross

@@ -11,6 +11,20 @@ class BinanceHistoricalProducer(Producer):
     def __init__(self, config):
         super().__init__(config)
 
+    def validate_config(self):
+        if 'pair' not in self.config:
+            raise Exception('Add a pair to your binance configuration. For example,\n'
+                            'binance:\n'
+                            '   pair: ETHUSDT')
+        if 'timeframe' not in self.config:
+            raise Exception('Add a timeframe to your binance configuration. For example,\n'
+                            'binance:\n'
+                            '   timeframe: 4h')
+        if 'start' not in self.config:
+            raise Exception('Add a start time to your binance configuration. For example,\n'
+                            'binance:\n'
+                            '   start: "2020-11-01 00:00:00"')
+
     async def produce(self):
         logger.debug(str(self) + ' preparing to initialize client')
         client = await AsyncClient.create(getenv('BINANCE_API_KEY'), getenv('BINANCE_API_SECRET'), tld='us')
@@ -41,6 +55,9 @@ class BinanceLiveProducer(Producer):
 
     def __init__(self, config):
         self.config = config
+
+    def validate_config(self):
+        pass
 
     async def produce(self):
         pass
