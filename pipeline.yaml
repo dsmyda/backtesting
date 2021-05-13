@@ -1,4 +1,8 @@
 pipeline:
+
+#  binancelive:
+#    timeframe: 1m
+#    pair: ETHUSDT
   csvfile:
     path: testdata/GOOG.csv
     schema:

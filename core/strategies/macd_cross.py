@@ -13,16 +13,24 @@ def macd_signal(arr):
     return macd_signal
 
 
+def crossed_between(a, b, candles = 3):
+    for i in range(1, candles):
+        if crossover(a[:-i], b[:-i]):
+            return True
+
+
 class MacdCross(Strategy):
     """ Test BUY/SELL signals on MACD crossovers """
+
+    EPSILON = 10
 
     def init(self):
         self.macd = self.I(macd, self.data.Close, overlay=True)
         self.macd_signal = self.I(macd_signal, self.data.Close, overlay=True)
 
     def next(self):
-        if crossover(self.macd, self.macd_signal):
+        if crossed_between(self.macd, self.macd_signal) and self.macd[-1] - self.macd_signal[-1] >= MacdCross.EPSILON:
             self.buy()
-        elif crossover(self.macd_signal, self.macd):
+        elif crossed_between(self.macd_signal, self.macd) and self.macd_signal[-1] - self.macd[-1] >= MacdCross.EPSILON:
             self.sell()
 

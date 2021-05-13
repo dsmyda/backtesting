@@ -1,2 +1,2 @@
 from .sma_cross import *
-from .macd import *
+from .macd_cross import *

@@ -1,3 +1,5 @@
+from asyncio.log import logger
+
 from core import Producer
 import csv
 from os import path
@@ -20,15 +22,15 @@ class CsvFile(Producer):
 
     def validate_config(self):
         if 'path' not in self.config:
-            raise Exception('Add a path to your cvsfile configuration. For example,\n'
-                            'csvfile:\n'
+            raise Exception('Add a path to your ' + str(self) + ' configuration. For example,\n'
+                            + str(self) + ':\n'
                             '   path: C:/Users/Danny/csv/btcusd.csv')
         if not path.exists(self.config['path']):
-            raise Exception('The file in your csvfile configuration does not exist.\n'
+            raise Exception('The file in your ' + str(self) + ' configuration does not exist.\n'
                             'Did you typo?')
         if 'schema' not in self.config:
-            raise Exception('Add a schema to your cvsfile configuration. For example,\n'
-                            'csvfile:\n'
+            raise Exception('Add a schema to your ' + str(self) + ' configuration. For example,\n'
+                            + str(self) + ':\n'
                             '   schema:\n'
                             '       Date: datetime - ISO\n'
                             '       Open: number\n'
@@ -36,8 +38,18 @@ class CsvFile(Producer):
 
     async def produce(self):
         with open(self.config['path']) as csvfile:
+            logger.debug(str(self) + '| opened csv file')
             reader = csv.DictReader(csvfile, delimiter=',')
+            logger.debug(str(self) + '| preparing to read csv file')
             for row in reader:
                 yield {k: [cast(self.config['schema'][k], val)] for k, val in row.items()}
+            logger.debug(str(self) + '| finished reading csv file')
 
         yield None
+
+    @staticmethod
+    def name():
+        return 'csvfile'
+
+    def __str__(self):
+        return CsvFile.name()

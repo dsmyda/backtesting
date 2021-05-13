@@ -1,10 +1,11 @@
-from core import BackTestConsumer, CsvFile
-from core.exchanges import BinanceHistoricalProducer
+from core import BackTest, CsvFile
+from core.exchanges import BinanceHistoricalAPI, BinanceLiveAPI
 
 node_factory = {
-    'binance': BinanceHistoricalProducer,
-    'backtest': BackTestConsumer,
-    'csvfile': CsvFile
+    BinanceHistoricalAPI.name(): BinanceHistoricalAPI,
+    BinanceLiveAPI.name(): BinanceLiveAPI,
+    BackTest.name(): BackTest,
+    CsvFile.name(): CsvFile
 }
 
 
