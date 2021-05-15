@@ -1,2 +1,3 @@
-from .sma_cross import *
-from .macd_cross import *
+from .macd import *
+from .rsi import *
+

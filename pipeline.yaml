@@ -1,17 +1,60 @@
 pipeline:
+  - csvfile:
+      path: testdata/GOOG.csv
+      schema:
+        Date: dateiso
+        Open: number
+        High: number
+        Low: number
+        Close: number
+        Adj Close: number
+        Volume: number
+  - backtest:
+      cash: 10000
+      strategy: rsi
+      optimize: # Find the best combination of overbought/oversold to maximize some objective measure
+        overbought: 90-100
+        oversold: 0-10
+        #- constraint: overbought > oversold
+        maximize: Equity Final [$]
 
+
+#- csvfile:
+#      path: testdata/GOOG.csv
+#      schema:
+#        Date: dateiso
+#        Open: number
+#        High: number
+#        Low: number
+#        Close: number
+#        Adj Close: number
+#        Volume: number
+#  - csvfile:
+#      path: GOOG-cpy.csv
+#  - csvfile:
+#      path: GOOG-cpy.csv
+#  binance:
+#    timeframe: 4h
+#    pair: ETHUSDT
+#    start: "2020-6-01"
 #  binancelive:
 #    timeframe: 1m
 #    pair: ETHUSDT
-  csvfile:
-    path: testdata/GOOG.csv
-    schema:
-      Date: dateiso
-      Open: number
-      High: number
-      Low: number
-      Close: number
-      Adj Close: number
-      Volume: number
-  backtest:
-    strategy: macdcross
+#  csvfile:
+#    path: testdata/GOOG.csv
+#    schema:
+#      Date: dateiso
+#      Open: number
+#      High: number
+#      Low: number
+#      Close: number
+#      Adj Close: number
+#      Volume: number
+#  csvfile:
+#    path: GOOG-cpy.csv
+#  backtest:
+#    strategy: rsi
+#    optimize:
+#      overbought: 0-100
+#      oversold: 0-100
+#      constraint: overbought > oversold

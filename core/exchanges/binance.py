@@ -8,8 +8,8 @@ from core.exchanges import Exchange
 class BinanceHistoricalAPI(Producer):
     """ Pulls historical Kline data from the Binance API """
 
-    def __init__(self, config):
-        super().__init__(config)
+    def __init__(self, config, role):
+        super().__init__(config, role)
 
     def validate_config(self):
         if 'pair' not in self.config:
@@ -36,7 +36,7 @@ class BinanceHistoricalAPI(Producer):
                                                             self.config['start'], limit=1000):
                 logger.debug(str(self) + '| kline data received')
                 kline.pop()  # Pop off legacy field, which we can ignore
-                yield dict(zip(Exchange.BINANCE.value['columns'], [[float(v) if i > 0 else v] for i, v in enumerate(kline)]))
+                yield dict(zip(Exchange.BINANCE.value['columns'], [float(v) if i > 0 else v for i, v in enumerate(kline)]))
 
             logger.debug(str(self) + '| finished fetching kline data')
         finally:
@@ -88,9 +88,8 @@ class BinanceLiveAPI(Producer):
         'Q': 'number'
     }
 
-    def __init__(self, config):
-        super().__init__(config)
-        self.config = config
+    def __init__(self, config, role):
+        super().__init__(config, role)
 
     def validate_config(self):
         if 'pair' not in self.config:
@@ -118,7 +117,7 @@ class BinanceLiveAPI(Producer):
                     data = {}
                     for k, v in event['k'].items():
                         if k in BinanceLiveAPI.columns:
-                            data[BinanceLiveAPI.columns[k]] = [v if k not in BinanceLiveAPI.datatypes else cast(BinanceLiveAPI.datatypes[k], v)]
+                            data[BinanceLiveAPI.columns[k]] = v if k not in BinanceLiveAPI.datatypes else cast(BinanceLiveAPI.datatypes[k], v)
                     yield data
         finally:
             logger.debug(str(self) + '| preparing to close connection')

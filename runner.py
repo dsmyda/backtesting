@@ -21,7 +21,14 @@ else:
         configuration = yaml.load(file, Loader=yaml.FullLoader)
 
         pipeline = Pipeline()
-        for name, config in configuration['pipeline'].items():
-            pipeline.add(create(name)(config))
+        for i, obj in enumerate(configuration['pipeline']):
+            name = next(iter(obj))
+            role = 'SOURCE'
+            if 0 < i < len(configuration['pipeline']) - 1:
+                role = 'INTERMEDIATE'
+            if i == len(configuration['pipeline']) - 1:
+                role = 'SINK'
+
+            pipeline.add(create(name)(obj[name], role))
 
     pipeline.run()

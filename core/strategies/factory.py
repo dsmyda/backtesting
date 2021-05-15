@@ -1,8 +1,8 @@
-from core.strategies import MacdCross, SmaCross
+from core.strategies import MACD, RSI
 
 factory = {
-    'macdcross': MacdCross,
-    'smacross': SmaCross
+    'macd': MACD,
+    'rsi': RSI
 }
 
 
